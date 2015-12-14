@@ -1,4 +1,4 @@
-# Debian - Python - Mod_Wsgi
+# Debian - Python - Nginx
 
 This is the repo for running a python app under `nginx` in a docker container
 

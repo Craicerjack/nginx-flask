@@ -9,12 +9,12 @@ FROM debian:latest
 # File Author / Maintainer
 MAINTAINER Carlos Tighe
 
-COPY ./nginx_signing.key /var/www/nginx-flask/nginx_signing.key
-RUN apt-key add nginx_signing.key
+COPY ./nginx_signing.key /var/www/app/nginx_signing.key
+RUN apt-key add /var/www/app/nginx_signing.key
 RUN echo "deb http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list
 RUN echo "deb-src http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list
 
-RUN apt-get update && apt-get install -y nginx
+RUN apt-get update && apt-get install -y nginx \
     build-essential \
     python \
     python-dev\
@@ -24,19 +24,24 @@ RUN apt-get update && apt-get install -y nginx
  && apt-get autoremove \
  && rm -rf /var/lib/apt/lists/*
 
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./app.conf /etc/nginx/conf.d/
+COPY ./uwsgi.ini /var/www/app/
+
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+
 # Copy over and install the requirements
-COPY ./app/requirements.txt /var/www/nginx-flask/app/requirements.txt
-RUN pip install -r /var/www/nginx-flask/app/requirements.txt
+COPY ./app/requirements.txt /var/www/app/app/requirements.txt
+RUN pip install -r /var/www/app/app/requirements.txt
 
+COPY ./run.py /var/www/app/run.py
+COPY ./app /var/www/app/app/
+RUN mkdir -p /var/log/uwsgi
 
-COPY ./run.py /var/www/nginx-flask/run.py
-COPY ./app /var/www/nginx-flask/app/
-
-RUN a2dissite 000-default.conf
-RUN a2ensite apache-flask.conf
 
 EXPOSE 80
 
-WORKDIR /var/www/nginx-flask
-
-CMD ["/bin/bash"]
+# CMD ["/bin/bash"]
+WORKDIR /var/www/app
+# Set the default command to execute
+# when creating a new container
