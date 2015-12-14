@@ -1,6 +1,6 @@
 # Debian - Python - Mod_Wsgi
 
-This is the repo for running a python app under `mod_wsgi` on apache in a docker container
+This is the repo for running a python app under `nginx` in a docker container
 
 Many of the docker repo's out there use flask local server in their images.
 This repo is for a more production ready environment.
@@ -10,11 +10,3 @@ It will contain a demo app written using the Flask framework
 
 I will be using [this Flask app](http://code.tutsplus.com/tutorials/an-introduction-to-pythons-flask-framework--net-28822) for the repo
 
-As of [commit f232e60c39fcd480fbabab6308eeaf24f4a9d5ae](https://github.com/Craicerjack/apache-flask/tree/f232e60c39fcd480fbabab6308eeaf24f4a9d5ae)
-The command to run the `Dockerfile` is:
-
-`docker run -d -p 80:80 --name <name> apache-flask`
-
-
-a2dissite 000-default.conf
-a2ensite apache-flask.conf
