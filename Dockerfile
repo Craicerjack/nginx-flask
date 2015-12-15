@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y nginx \
  && rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./app.conf /etc/nginx/conf.d/
+COPY ./nginx.conf /etc/nginx/conf.d/
 COPY ./uwsgi.ini /var/www/app/
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
@@ -37,11 +37,12 @@ RUN pip install -r /var/www/app/app/requirements.txt
 COPY ./run.py /var/www/app/run.py
 COPY ./app /var/www/app/app/
 RUN mkdir -p /var/log/uwsgi
-
+RUN chown -R www-data:www-data /var/www/app
 
 EXPOSE 80
 
-# CMD ["/bin/bash"]
+# RUN /etc/init.d/nginx start
 WORKDIR /var/www/app
+CMD ["/bin/bash", "-c", "uwsgi -s /tmp/uwsgi.sock --module app --callable run"]
 # Set the default command to execute
 # when creating a new container
