@@ -14,7 +14,6 @@ I will be using [this Flask app](http://code.tutsplus.com/tutorials/an-introduct
  * copy nginx key
  * add update sources
  * update and install dependencies
-
  * copy requirements.txt
  * install pip dependencies
  * copy files across:
@@ -22,6 +21,7 @@ I will be using [this Flask app](http://code.tutsplus.com/tutorials/an-introduct
     * uwsgi ini file `uwsgi.ini`
     * nginx config file `app.conf`
     * starting script `start.sh`
+
 * rm nginx default configuration
 * simlink `app.conf` to nginx configuration `/etc/nginx/conf.d/`
 * copy app
