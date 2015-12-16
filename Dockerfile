@@ -19,7 +19,6 @@ RUN apt-get update && apt-get install -y nginx \
     python \
     python-dev\
     python-pip \
-    vim \
  && apt-get clean \
  && apt-get autoremove \
  && rm -rf /var/lib/apt/lists/*
