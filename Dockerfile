@@ -28,37 +28,15 @@ RUN apt-get update && apt-get install -y nginx \
 COPY ./app/requirements.txt /var/www/app/app/requirements.txt
 RUN pip install -r /var/www/app/app/requirements.txt
 
-COPY ./run.py /var/www/app/run.py
-COPY ./uwsgi.ini /var/www/app/uwsgi.ini
-# RUN ln -s /var/www/app/uwsgi.ini /etc/uwsgi/apps-enabled/
-COPY ./app.conf /var/www/app/app.conf
+
+COPY ./run.py ./uwsgi.ini ./app.conf ./start.sh /var/www/app/
 RUN rm /etc/nginx/conf.d/default.conf && ln -s /var/www/app/app.conf /etc/nginx/conf.d/
 COPY ./app /var/www/app/app/
 
+RUN chmod a+x /var/www/app/start.sh
 
 WORKDIR /var/www/app
-RUN nginx
+
 EXPOSE 80
-CMD ["/bin/bash", "-c", "uwsgi uwsgi.ini"]
+CMD ["/bin/bash", "-c", "./start.sh"]
 
-
-# RUN rm /etc/nginx/conf.d/default.conf
-# COPY ./nginx.conf /etc/nginx/conf.d/
-# COPY ./uwsgi.ini /var/www/app/
-
-# RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-
-
-
-# COPY ./run.py /var/www/app/run.py
-# COPY ./app /var/www/app/app/
-# RUN mkdir -p /var/log/uwsgi
-# RUN chown -R www-data:www-data /var/www/app
-
-# EXPOSE 80
-
-# # RUN /etc/init.d/nginx start
-
-# CMD ["/bin/bash", "-c", "uwsgi -s /tmp/uwsgi.sock --module app --callable run"]
-# Set the default command to execute
-# when creating a new container
