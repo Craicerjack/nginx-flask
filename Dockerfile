@@ -29,9 +29,17 @@ COPY ./app/requirements.txt /var/www/app/app/requirements.txt
 RUN pip install -r /var/www/app/app/requirements.txt
 
 COPY ./run.py /var/www/app/run.py
+COPY ./uwsgi.ini /var/www/app/uwsgi.ini
+# RUN ln -s /var/www/app/uwsgi.ini /etc/uwsgi/apps-enabled/
+COPY ./app.conf /var/www/app/app.conf
+RUN rm /etc/nginx/conf.d/default.conf && ln -s /var/www/app/app.conf /etc/nginx/conf.d/
 COPY ./app /var/www/app/app/
+
+
 WORKDIR /var/www/app
-CMD ["/bin/bash", "-c", "uwsgi --http 0.0.0.0:80 --wsgi-file ./run.py"]
+RUN nginx
+EXPOSE 80
+CMD ["/bin/bash", "-c", "uwsgi uwsgi.ini"]
 
 
 # RUN rm /etc/nginx/conf.d/default.conf
