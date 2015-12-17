@@ -27,15 +27,21 @@ RUN apt-get update && apt-get install -y nginx \
 COPY ./app/requirements.txt /var/www/app/app/requirements.txt
 RUN pip install -r /var/www/app/app/requirements.txt
 
-
 COPY ./run.py ./uwsgi.ini ./app.conf ./start.sh /var/www/app/
 RUN rm /etc/nginx/conf.d/default.conf && ln -s /var/www/app/app.conf /etc/nginx/conf.d/
 COPY ./app /var/www/app/app/
+
+# WORKDIR /var/www/app
+# EXPOSE 80
+# CMD ["/bin/bash", "-c", "uwsgi uwsgi.ini"]
+
+# ONBUILD RUN service nginx start
 
 RUN chmod a+x /var/www/app/start.sh
 
 WORKDIR /var/www/app
 
 EXPOSE 80
-CMD ["/bin/bash", "-c", "./start.sh"]
+
+CMD ["/bin/bash", "-c", "nginx; uwsgi uwsgi.ini"]
 
