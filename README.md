@@ -20,12 +20,10 @@ I will be using [this Flask app](http://code.tutsplus.com/tutorials/an-introduct
     * module file `run.py`
     * uwsgi ini file `uwsgi.ini`
     * nginx config file `app.conf`
-    * starting script `start.sh`
 
 * rm nginx default configuration
 * simlink `app.conf` to nginx configuration `/etc/nginx/conf.d/`
 * copy app
-* make `start.sh` executable
 * set workdir
 * expose port 80
 * run cmd
